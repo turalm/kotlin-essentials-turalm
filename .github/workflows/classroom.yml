@@ -1,0 +1,30 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: 'Lesson 3: Object-Oriented Programming Principles'
+      id: lesson-3-object-oriented-programming-principles
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: 'Lesson 3: Object-Oriented Programming Principles'
+        setup-command: ''
+        command: "./gradlew testLesson03"
+        timeout: 10
+        max-score: 20
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        LESSON-3-OBJECT-ORIENTED-PROGRAMMING-PRINCIPLES_RESULTS: "${{steps.lesson-3-object-oriented-programming-principles.outputs.result}}"
+      with:
+        runners: lesson-3-object-oriented-programming-principles
