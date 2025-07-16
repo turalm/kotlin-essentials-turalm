@@ -15,6 +15,19 @@ const val FLAT_WHITE_PRICE = 3.2
     4. Calculate a discount if 3 or more items are ordered (the cheapest item is free)
     5. Print the total price with a discount applied for each order
  */
+
+fun getPrice(item: String): Double {
+    return when (item) {
+        "Espresso" -> ESPRESSO_PRICE
+        "Double Espresso" -> DOUBLE_ESPRESSO_PRICE
+        "Cappuccino" -> CAPPUCCINO_PRICE
+        "Latte" -> LATTE_PRICE
+        "Americano" -> AMERICANO_PRICE
+        "Flat White" -> FLAT_WHITE_PRICE
+        else -> 0.0
+    }
+}
+
 fun conditionals() {
     val coffeeOrders = mapOf(
         1 to listOf(ESPRESSO, CAPPUCCINO, LATTE, AMERICANO),
@@ -26,9 +39,16 @@ fun conditionals() {
         println("Processing Order ID: $orderId")
         println("Items: $items")
 
-        val total: Double = TODO("Calculate total price for the order")
+        val prices = items.map { getPrice(it) }
+        var total = prices.sum()
+        if (items.size >= 3) {
+            val cheapest = prices.minOrNull() ?: 0.0
+            total -= cheapest
+            println("Discount applied: -$cheapest (cheapest item free)")
+        }
 
-        println("Total price for Order ID $orderId: $total\n")
+
+        println("Total price for Order ID $orderId: %.2f".format(total))
     }
 }
 

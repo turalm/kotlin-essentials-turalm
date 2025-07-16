@@ -1,6 +1,7 @@
 package com.motycka.edu.lesson02
 
 val coffeeOrders = mutableMapOf<Int, List<String>>()
+var nextOrderId = 1
 
 fun main() {
     // You can write code here to try the functions
@@ -22,9 +23,30 @@ fun processOrder(items: List<String>, payment: Double): Double {
     return change
 }
 
-// TODO Implement placerOrder(items: List<String>): Int
+fun placeOrder(items: List<String>): Int {
+    val orderId = nextOrderId++
+    coffeeOrders[orderId] = items
+    println("Order placed: ID=$orderId, Items=$items")
+    return orderId
+}
 
-// TODO Implement payOrder(orderId: Int): Double
+fun payOrder(orderId: Int): Double {
+    val items = coffeeOrders[orderId] ?: throw IllegalArgumentException("Order not found: $orderId")
+    val prices = items.map { getPrice(it) }
+    var total = prices.sum()
 
-// TODO Implement completeOrder(orderId: Int)
+    if (items.size >= 3) {
+        val discount = prices.minOrNull() ?: 0.0
+        total -= discount
+        println("Discount applied to Order $orderId: -$discount")
+    }
+
+    println("Total to pay for Order $orderId: %.2f".format(total))
+    return total
+}
+
+fun completeOrder(orderId: Int) {
+    coffeeOrders.remove(orderId)
+    println("Order $orderId completed and removed from system.")
+}
 
