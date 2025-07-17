@@ -13,14 +13,14 @@ fun main() {
 /* Implement the functions below */
 
 fun processOrder(items: List<String>, payment: Double): Double {
-    val orderId = TODO("call placerOrder(items)")
-    val totalToPay = TODO("call payOrder(orderId)")
-
-    val change = TODO("calculate change by subtracting totalToPay from payment")
-
-    // TODO call completeOrder(orderId)
-
-    return change
+    val orderId = placeOrder(items)
+    val totalToPay = payOrder(orderId)
+    if (payment < totalToPay) {
+        throw IllegalArgumentException("Insufficient payment! Total: $totalToPay, Payment: $payment")
+    }
+    val change = payment - totalToPay
+    completeOrder(orderId)
+    return String.format("%.2f", change).toDouble()  // rounding to 2 decimal places
 }
 
 fun placeOrder(items: List<String>): Int {
